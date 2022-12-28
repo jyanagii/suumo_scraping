@@ -6,9 +6,7 @@ from tqdm import tqdm
 import datetime
 
 # 東京23区
-#base_url = "https://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=9999999&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=25&pc=50&page={}"
-#50m2以上、管理費共益費込みで25万円まで
-base_url = "https://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&pc=50&smk=&po1=25&po2=99&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&ta=13&cb=0.0&ct=25.0&co=1&et=9999999&mb=50&mt=9999999&cn=9999999&fw2=&page={}"
+base_url = "https://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&sc=13102&sc=13103&sc=13104&sc=13105&sc=13113&sc=13106&sc=13107&sc=13108&sc=13118&sc=13121&sc=13122&sc=13123&sc=13109&sc=13110&sc=13111&sc=13112&sc=13114&sc=13115&sc=13120&sc=13116&sc=13117&sc=13119&cb=0.0&ct=9999999&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=25&pc=50&page={}"
 @retry(tries=3, delay=10, backoff=2)
 def get_html(url):
     r = requests.get(url)
@@ -16,9 +14,7 @@ def get_html(url):
     return soup
 
 all_data = []
-#max_page = 2921
-#50m2以上、管理費共益費込みで25万円まで
-max_page = 227
+max_page = 2921
 for page in tqdm(range(1, max_page+1)):
     # define url 
     url = base_url.format(page)
@@ -58,11 +54,10 @@ for page in tqdm(range(1, max_page+1)):
 # convert to dataframe
 df = pd.DataFrame(all_data)
 
-
 df.drop_duplicates(inplace=True)
 df.reset_index(inplace=True)
 
 today = datetime.datetime.now().strftime('%Y%m%d')
-filepath = "./" + today + "suumo_scraping_result_50m2_u250k.csv"
+filepath = "./" + today + "_suumo_scraping_result.csv"
 df.to_csv(filepath)
 
