@@ -26,7 +26,7 @@ for page in tqdm(range(1, max_page+1)):
     soup = get_html(url)
     # extract all items
     items = soup.findAll("div", {"class": "cassetteitem"})
-    print("page", page, "items", len(items))
+    #print("page", page, "items", len(items))
     #import pdb;pdb.set_trace()
     # process each item
     for item in items:
